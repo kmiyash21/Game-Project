@@ -7,8 +7,8 @@ let me;
 let mySound;
 
 function preload() {
-  soundFormats('mp3', 'ogg');
-  mySound = loadSound('boing1.mp3');
+  soundFormats('wav', 'ogg');
+  mySound = loadSound('62363__fons__zap-2.wav');
 }
 
 function setup() {
@@ -20,13 +20,12 @@ function setup() {
 }
 
 function draw(){
-	background(220);
-
+	background(0);
   me.drawMe();
   me.moveMe();
 
   if (frameCount % 25 == 0) {
-      let  b = new Ball(width, random(0,height), -3);
+      let  b = new Ball(random(0,width),0, -3);
       balls.push(b);
       console.log(balls); //print the balls array to the console
     }
@@ -50,25 +49,35 @@ class Avatar {
 	}
 
 	drawMe(){  // draw the running person
+        fill("yellow")
+        stroke("red")
+        strokeWeight(4)
+        triangle(this.x,this.y+30,this.x-40,this.y+50,this.x+40,this.y+50)
     		stroke("green");
         strokeWeight(3);
     		fill("blue");
-		    ellipse(this.x,this.y,20,20);
-        line(this.x,this.y, this.x, this.y+40);
-        line(this.x, this.y+40, this.x-20, this.y+60);
-        line(this.x, this.y+40, this.x+10, this.y+50);
-        line(this.x+10, this.y+50, this.x+5, this.y+60);
-        line(this.x, this.y+15, this.x-10, this.y+25);
-        line(this.x-10, this.y+25, this.x+10, this.y+35);
+		    ellipse(this.x,this.y,50,90);
+        fill("red")
+        ellipse(this.x,this.y+20,20,20)
+        ellipse(this.x,this.y-10,20,20)
+
 	}
 
 	moveMe(){
-    if (keyIsDown(UP_ARROW)) { //if you hold the up arrow, move up by speed
-       this.y -= this.speed;
+    if (keyIsDown(RIGHT_ARROW)) { //if you hold the up arrow, move up by speed
+       this.x += 10;
+    }
+
+    if (keyIsDown(LEFT_ARROW)) { // if you hold the down arrow, move down by speed
+        this.x -= 10;
+    }
+
+    if (keyIsDown(UP_ARROW)) { // if you hold the down arrow, move down by speed
+        this.y -= 10;
     }
 
     if (keyIsDown(DOWN_ARROW)) { // if you hold the down arrow, move down by speed
-        this.y += this.speed;
+        this.y += 10;
     }
 	}
 
@@ -85,29 +94,32 @@ class Ball {
 	//every ball needs an x value, a y value, and a speed
 	constructor(x,y, speed){
 		this.x = x;
-    		this.y = y;
-        	this.speed = speed;
+    this.y = y;
+    this.speed = speed;
 	}
 
 	// draw a ball on the screen at x,y
 	drawBall(){
-    		stroke(0);
-        	strokeWeight(1);
-    		fill("red");
-		ellipse(this.x,this.y,10,10);
+    	stroke(0);
+      strokeWeight(1);
+    	fill(0,255,124);
+		  ellipse(this.x,this.y,40,40);
+      fill(random(255),random(255),random(255))
+      ellipse(this.x+10,this.y+10,8,8)
+      ellipse(this.x-10,this.y+10,8,8)
 	}
 
 	//update the location of the ball, so it moves across the screen
 	moveBall(){
-		this.x = this.x+ this.speed;
-		this.y = this.y+.5;
+		this.x = this.x;
+		this.y = this.y- this.speed;
 	}
 
-	//if the ball hits the paddle, change the speed value to negative (send it in the opposite direction)
+	//if the ball hits the person, change the speed value to negative (send it in the opposite direction)
   	bounceBall(){
-    		if (this.x >= me.x-15 && this.x <= me.x+15 && this.y > me.y-40 && this.y < me.y+40){
+    		if (this.x >= me.x-25 && this.x <= me.x+25 && this.y > me.y-80 && this.y < me.y+30){
       			this.speed = -this.speed;
-            mySound.setVolume(0.1);
+            mySound.setVolume(0.001);
             mySound.play();
     		}
   	}
